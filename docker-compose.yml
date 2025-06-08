@@ -1,0 +1,61 @@
+# docker-compose.yml
+
+services:
+  nginx:
+    # Build context para Nginx es relativo a docker-compose.yml
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: myapp_nginx
+    ports:
+      - "80:80"
+      # - "443:443" # Descomentar para HTTPS
+    depends_on:
+      - node_app
+    networks:
+      - app_network
+
+  node_app:
+    # --- MODIFICADO PARA COMPATIBILIDAD CON EASYPANEL ---
+    # 'context: .' le dice a Docker que el contexto de construcción es el directorio
+    # donde se encuentra el archivo docker-compose.yml.
+    # Luego, 'dockerfile: node/Dockerfile' especifica la ruta del Dockerfile
+    # *dentro de ese contexto*. Esto es más robusto para entornos que
+    # manipulan los directorios de trabajo internos.
+    build:
+      context: . # Usa la raíz del proyecto (donde está docker-compose.yml) como contexto
+      dockerfile: node/Dockerfile # Especifica la ruta al Dockerfile dentro de ese contexto
+    container_name: myapp_node
+    volumes:
+      # Monta el código de tu app Node.js desde el host al contenedor
+      # Asegúrate de que tu carpeta 'node' esté en la raíz de tu proyecto.
+      - ./node:/app
+    ports:
+      - "3000:3000" # Expone el puerto 3000 de la app Node al host
+    env_file:
+      - ./.env # Carga variables de entorno
+    networks:
+      - app_network
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine # Imagen oficial de PostgreSQL basada en Alpine
+    container_name: myapp_postgres_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data # Volumen persistente para los datos
+    environment:
+      POSTGRES_DB: ${DB_NAME:-mydb}
+      POSTGRES_USER: ${DB_USER:-user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+    ports:
+      - "5432:5432" # Expone el puerto 5432 (opcional)
+    networks:
+      - app_network
+    restart: unless-stopped
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  pgdata:
