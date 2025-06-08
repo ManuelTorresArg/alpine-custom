@@ -7,7 +7,7 @@ WORKDIR /app
 # al directorio de trabajo /app dentro del contenedor.
 COPY node/package*.json ./ 
 
-RUN npm install # Ahora debería encontrar package.json en /app/package.json
+RUN npm install 
 
 # Copia el resto del código de la carpeta 'node' del contexto
 COPY node/. . 
