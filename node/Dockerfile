@@ -3,14 +3,14 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# --- CAMBIO CLAVE AQUÍ ---
 # Copia el package.json y package-lock.json de la carpeta 'node' del contexto
 # al directorio de trabajo /app dentro del contenedor.
-COPY node/package*.json ./ # <-- ¡Ruta relativa al CONTEXTO DE CONSTRUCCIÓN!
+COPY node/package*.json ./ # <--- ¡ELIMINA EL COMENTARIO EN ESTA LÍNEA!
+
 RUN npm install # Ahora debería encontrar package.json en /app/package.json
 
 # Copia el resto del código de la carpeta 'node' del contexto
-COPY node/. . # <-- ¡Ruta relativa al CONTEXTO DE CONSTRUCCIÓN!
+COPY node/. . # <--- ¡ELIMINA EL COMENTARIO EN ESTA LÍNEA!
 
 EXPOSE 3000
 
