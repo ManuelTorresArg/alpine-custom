@@ -9,7 +9,7 @@ services:
     container_name: myapp_nginx
     ports:
       - "8080:80"
-      # - "443:443" # Descomentar para HTTPS
+      - "443:443" # Descomentar para HTTPS
     depends_on:
       - node_app
     networks:
