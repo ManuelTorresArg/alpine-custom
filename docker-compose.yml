@@ -31,7 +31,7 @@ services:
       # Asegúrate de que tu carpeta 'node' esté en la raíz de tu proyecto.
       - ./node:/app
     ports:
-      - "3003:3003" # Expone el puerto 3000 de la app Node al host
+      - "3000:3000" # Expone el puerto 3000 de la app Node al host
     env_file:
       - ./.env # Carga variables de entorno
     networks:
