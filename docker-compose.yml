@@ -30,8 +30,9 @@ services:
       # Monta el código de tu app Node.js desde el host al contenedor
       # Asegúrate de que tu carpeta 'node' esté en la raíz de tu proyecto.
       - ./node:/app
+      - /app/node_modules
     ports:
-      - "3000:3000" # Expone el puerto 3000 de la app Node al host
+      - "3003:3000" # Expone el puerto 3000 de la app Node al host
     env_file:
       - ./.env # Carga variables de entorno
     networks:
@@ -59,3 +60,4 @@ networks:
 
 volumes:
   pgdata:
+  node_modules_volume:
